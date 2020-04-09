@@ -1,0 +1,20 @@
+#!/bin/bash
+lastrebootmin=15;
+uptimestring=`uptime | sed 's/.*up \([^,]*\), .*/\1/'`;
+uptimenumber=`echo "${uptimestring}" | sed 's/[^0-9]*//g'`;
+uptimemins=`echo "${uptimestring}" |grep 'min'|wc -l`;
+umask 0022
+if [ $uptimemins -ge 1 ];
+then if [ $uptimenumber -le $lastrebootmin ];
+then
+echo "`date` REBOOTED" > /var/log/scom-uptime.log;
+echo "`date` REBOOTED" >> /var/log/scom-uptime.history.log;
+##  two log files
+else
+echo `date` "OK" > /var/log/scom-uptime.log;
+echo `date` "OK" >> /var/log/scom-uptime.history.log;
+fi;
+else
+echo `date` "OK" > /var/log/scom-uptime.log;
+echo `date` "OK" >> /var/log/scom-uptime.history.log;
+fi
