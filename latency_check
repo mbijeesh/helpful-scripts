@@ -1,0 +1,24 @@
+
+# This script is to check the latency status 
+
+#Host names
+HOST1="IP1"
+HOST2="IP2"
+HOST3="IP3"
+
+# No ping request
+COUNT=10
+
+# Email Details
+SUBJECT=" Network Latency Crossed Threshold"
+EMAILID="email1 email2"
+for myHost in $HOST1 $HOST2 $HOST3
+do
+  count=$(ping -c $COUNT $myHost| tail -1| awk '{print $4}' | cut -d '/' -f 2| cut -f1 -d'.')
+if [ $count -gt 200 ] ; then
+# Network Latency Above Threshold of 200
+echo "$myHost :  - Network Latency above threshold at $(date)" and the avg is $count | mail -s "$SUBJECT" $EMAILID
+
+  fi
+done
+
